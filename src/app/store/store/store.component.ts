@@ -17,4 +17,8 @@ export class StoreComponent {
   addToCart(grocers: Item) {
     this.greenGrocersService.inspectCartAndAddItem(grocers);
   }
+
+  updateStoreItems(value: string) {
+    this.greenGrocersService.setFilterValue(value);
+  }
 }

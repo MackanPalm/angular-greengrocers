@@ -1,3 +1,9 @@
+<select #storeItems (change)="updateStoreItems(storeItems.value)">
+  <option default value="all">All</option>
+  <option value="fruits">Fruits</option>
+  <option value="vegetables">Vegetables</option>
+</select>
+
 <ul class="item-list store--item-list">
   <li *ngFor="let grocer of greenGrocersService.items">
     <div class="store--item-icon">

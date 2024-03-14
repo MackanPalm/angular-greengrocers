@@ -15,25 +15,30 @@ export class GreenGrocersServiceService {
 
   totalCost: string = '';
 
+  filterValue: string = 'all';
+
   constructor(private readonly http: HttpClient) {
-    this.loadItems();
+    this.loadItems(this.filterValue);
     this.loadTotalCost();
   }
 
-  async loadItems() {
-    this.items = await firstValueFrom(
-      this.http.get<Item[]>(`${environment.apiUrl}groceries`)
-    );
-  }
+  async loadItems(filterValue: string) {
+    let toAdd = '';
+    switch (filterValue) {
+      case 'all':
+        break;
+      case 'vegetables':
+        toAdd = '?type=vegetable';
+        break;
+      case 'fruits':
+        toAdd = '?type=fruit';
+        break;
+      default:
+        break;
+    }
 
-  get vegetables(): Promise<Item[]> {
-    return firstValueFrom(
-      this.http.get<Item[]>(`${environment.apiUrl}/groceries?type=vegetable`)
-    );
-  }
-  get fruits(): Promise<Item[]> {
-    return firstValueFrom(
-      this.http.get<Item[]>(`${environment.apiUrl}/groceries?type=fruit`)
+    this.items = await firstValueFrom(
+      this.http.get<Item[]>(`${environment.apiUrl}groceries${toAdd}`)
     );
   }
 
@@ -84,5 +89,11 @@ export class GreenGrocersServiceService {
     });
     this.totalCost = tempCost.toFixed(2);
     console.log('totalCost', this.totalCost);
+  }
+
+  async setFilterValue(value: string) {
+    this.filterValue = value;
+
+    await this.loadItems(this.filterValue);
   }
 }
